@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/Stats.js"></script>
+    <script src="../lib/tween.min.js"></script>
+
+    <style type="text/css">
+        canvas {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+        html,body {
+            margin: 0;
+        }
+
+    </style>
+
+</head>
+<body>
+<!--<div class="controller">-->
+    <!--<input type="text"><span>position.z</span>-->
+    <!--<input type="text"><span>position.y</span>-->
+<!--</div>-->
+</body>
+<script>
+  var camera, scene, renderer;
+  var geometry, material, mesh;
+
+  init();
+  animate();
+  
+  function initGridHelper() {
+    var size = 100;
+    var divisions = 10;
+    var gridHelper = new THREE.GridHelper( size, divisions );
+    scene.add( gridHelper );
+  }
+
+  function init() {
+
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.z = 80;
+//    camera.position.x = 100;
+    camera.position.y = 50;
+
+    scene = new THREE.Scene();
+
+    geometry = new THREE.BoxGeometry( 10, 10, 10);
+
+    material = new THREE.MeshNormalMaterial();
+
+    mesh = new THREE.Mesh( geometry, material );
+    mesh.position.z = 5;
+    mesh.position.y = 5;
+    mesh.position.x = 5;
+    scene.add( mesh );
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+    initGridHelper();
+    initKeyListener()
+  }
+
+  function animate() {
+
+    requestAnimationFrame( animate );
+    camera.lookAt( scene.position );
+
+//    mesh.rotation.x += 0.01;
+//    mesh.rotation.y += 0.02;
+
+    renderer.render( scene, camera );
+  }
+
+  function boxUp() {
+    mesh.rotation.x += 1/2*Math.PI;
+    console.log(mesh.rotation.x)
+  }
+
+  function initKeyListener() {
+    document.onkeyup = function (e) {
+      console.log(e.keyCode)
+      e = e || window.event;
+      e.preventDefault();
+      switch (e.keyCode) {
+        case 38:
+          boxUp();
+          break;
+        case 40:
+          console.log('下键');
+          break;
+      }
+    }
+  }
+</script>
+</html>
